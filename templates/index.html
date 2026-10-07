@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f3f7f4">
+  <title>Real-Time Fraud Detection &amp; Transaction Monitoring</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js" defer></script>
+  <script src="/static/script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="Fraud detection dashboard home">
+        <span class="brand-mark" aria-hidden="true">⬡</span>
+        <span class="brand-name">Sentinel<span> / Lab</span></span>
+      </a>
+      <div class="sidebar-caption">WORKSPACE</div>
+      <nav aria-label="Main navigation">
+        <a class="nav-link active" href="#overview"><span class="nav-icon" aria-hidden="true">◫</span> Overview</a>
+        <a class="nav-link" href="#analyze"><span class="nav-icon" aria-hidden="true">⊕</span> Analyze transaction</a>
+        <a class="nav-link" href="#activity"><span class="nav-icon" aria-hidden="true">≋</span> Transaction activity</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="environment-mark"><span class="live-dot"></span> LOCAL SIMULATION</div>
+        <p>Educational model · Synthetic data only</p>
+        <div class="sidebar-version">MODEL <span id="sidebar-model-name">Random Forest</span></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb">WORKSPACE <span>/</span> MONITOR</div>
+        <div class="topbar-right"><span class="topbar-date" id="current-date"></span><span class="avatar" aria-label="Local analyst">LA</span></div>
+      </header>
+
+      <section class="page-heading" id="overview">
+        <div>
+          <div class="eyebrow"><span class="live-dot"></span> SYSTEM ONLINE <span class="eyebrow-divider">/</span> REAL-TIME MONITORING</div>
+          <h1>REAL-TIME FRAUD DETECTION<br class="mobile-break"> &amp; TRANSACTION MONITORING</h1>
+          <p>Machine Learning Powered Transaction Risk Analysis</p>
+        </div>
+        <div class="heading-actions"><span class="model-chip"><span aria-hidden="true">✳</span> RANDOM FOREST CLASSIFIER</span><a class="heading-action" href="#analyze"><span aria-hidden="true">＋</span> New analysis</a></div>
+      </section>
+
+      <section class="metrics-grid" aria-label="Transaction overview">
+        <article class="metric-panel metric-total"><div class="metric-label">TOTAL TRANSACTIONS</div><div class="metric-value" id="stat-total">0</div><div class="metric-foot"><span class="metric-symbol">↗</span> All recorded activity</div></article>
+        <article class="metric-panel"><div class="metric-label"><span class="state-dot approved-dot"></span> APPROVED</div><div class="metric-value" id="stat-approved">0</div><div class="metric-foot">Low-risk decisions</div></article>
+        <article class="metric-panel"><div class="metric-label"><span class="state-dot review-dot"></span> UNDER REVIEW</div><div class="metric-value" id="stat-review">0</div><div class="metric-foot">Requires a closer look</div></article>
+        <article class="metric-panel"><div class="metric-label"><span class="state-dot blocked-dot"></span> BLOCKED</div><div class="metric-value" id="stat-blocked">0</div><div class="metric-foot">High-risk decisions</div></article>
+        <article class="metric-panel metric-rate"><div class="metric-label">FRAUD DETECTION RATE</div><div class="metric-value"><span id="stat-fraud-rate">0.0</span><small>%</small></div><div class="metric-foot">Average model probability</div></article>
+      </section>
+
+      <section class="work-grid">
+        <section class="panel analysis-panel" id="analyze">
+          <div class="panel-heading">
+            <div><div class="section-index">01 / NEW REQUEST</div><h2>Analyze transaction</h2></div>
+            <span class="panel-tag"><span class="live-dot"></span> MODEL READY</span>
+          </div>
+          <div class="sample-toolbar" aria-label="Demo transaction presets">
+            <span>LOAD DEMO</span>
+            <button type="button" class="sample-button" data-sample="safe">Safe</button>
+            <button type="button" class="sample-button" data-sample="suspicious">Suspicious</button>
+            <button type="button" class="sample-button sample-high" data-sample="high">High risk</button>
+          </div>
+          <form id="transaction-form">
+            <div class="form-grid">
+              <label class="field field-wide" for="amount"><span>TRANSACTION AMOUNT <b>₹</b></span><input id="amount" name="amount" type="number" min="1" max="10000000" step="0.01" placeholder="0.00" required></label>
+              <label class="field" for="transaction-time"><span>TRANSACTION TIME</span><input id="transaction-time" name="transaction_time" type="time" value="09:30" required></label>
+              <label class="field" for="device-id"><span>DEVICE ID <i>Identifier only</i></span><input id="device-id" name="device_id" type="text" maxlength="64" placeholder="e.g. DEV-48219" required></label>
+              <label class="field" for="is-new-device"><span>NEW DEVICE</span><select id="is-new-device" name="is_new_device"><option value="false">No · Known device</option><option value="true">Yes · First seen</option></select></label>
+              <label class="field" for="location"><span>TRANSACTION LOCATION</span><input id="location" name="location" type="text" maxlength="120" placeholder="e.g. Tumkur" required></label>
+              <label class="field" for="transactions-last-5min"><span>TRANSACTIONS / 5 MIN</span><input id="transactions-last-5min" name="transactions_last_5min" type="number" min="0" max="100" step="1" value="1" required></label>
+              <label class="field" for="amount-last-5min"><span>AMOUNT SPENT / 5 MIN <b>₹</b></span><input id="amount-last-5min" name="amount_last_5min" type="number" min="0" max="10000000" step="0.01" value="0" required></label>
+              <label class="field" for="average-amount"><span>AVERAGE PREVIOUS AMOUNT <b>₹</b></span><input id="average-amount" name="average_transaction_amount" type="number" min="1" max="10000000" step="0.01" placeholder="1,000" required></label>
+              <label class="field" for="distance"><span>DISTANCE FROM USUAL LOCATION <i>km</i></span><input id="distance" name="distance_from_usual_location" type="number" min="0" max="20000" step="0.1" value="5" required></label>
+            </div>
+            <div class="form-bottom"><p>Device ID is stored for display and is not used as a model feature.</p><button type="submit" id="analyze-button" class="analyze-button"><span class="button-icon" aria-hidden="true">⌁</span> ANALYZE TRANSACTION <span class="button-arrow" aria-hidden="true">↗</span></button></div>
+            <div class="form-error" id="form-error" role="alert" hidden></div>
+          </form>
+
+        </section>
+
+        <aside class="side-panels">
+          <section class="panel result-panel" id="result-panel" aria-live="polite">
+            <div class="result-topline"><span>LATEST TRANSACTION ASSESSMENT</span><button type="button" class="result-dismiss" id="dismiss-result" aria-label="Dismiss analysis result">×</button></div>
+            <div class="result-main"><div><div class="result-label">FRAUD PROBABILITY</div><div class="result-probability" id="result-probability">—<span>%</span></div></div><div class="result-decision"><span class="decision-pill ready" id="result-decision">READY</span><span class="result-risk" id="result-risk">AWAITING ANALYSIS</span></div></div>
+            <div class="probability-track"><span id="probability-fill"></span></div>
+            <div class="probability-scale"><span>LOW RISK</span><span>REVIEW</span><span>HIGH RISK</span></div>
+            <div class="result-details"><div><span>TRANSACTION ID</span><strong id="result-id">Awaiting transaction</strong></div><div><span>TRANSACTION STATUS</span><strong id="result-status">READY</strong></div></div>
+          </section>
+        </aside>
+      </section>
+
+      <section class="insights-grid" aria-label="Transaction risk visualizations">
+        <section class="panel chart-panel">
+          <div class="panel-heading compact-heading"><div><div class="section-index">02 / DECISIONS</div><h2>Decision mix</h2></div><span class="chart-total" id="chart-total">0 total</span></div>
+          <div class="chart-wrap"><canvas id="decision-chart" role="img" aria-label="Doughnut chart of approved, review, and blocked transactions"></canvas><div class="chart-center"><strong id="chart-center-total">0</strong><span>TRANSACTIONS</span></div></div>
+          <div class="chart-legend"><div><span class="legend-swatch approved-swatch"></span>Approved<strong id="legend-approved">0</strong></div><div><span class="legend-swatch review-swatch"></span>Review<strong id="legend-review">0</strong></div><div><span class="legend-swatch blocked-swatch"></span>Blocked<strong id="legend-blocked">0</strong></div></div>
+        </section>
+        <section class="panel model-panel">
+          <div class="section-index">03 / MODEL HEALTH</div><div class="model-title"><span class="model-icon" aria-hidden="true">◎</span><div><h2 id="model-name">Random Forest Classifier</h2><p>Holdout evaluation · Synthetic data</p></div></div>
+          <div class="model-metrics"><div><span>ACCURACY</span><strong id="metric-accuracy">—</strong></div><div><span>PRECISION</span><strong id="metric-precision">—</strong></div><div><span>RECALL</span><strong id="metric-recall">—</strong></div><div><span>F1 SCORE</span><strong id="metric-f1">—</strong></div></div>
+          <div class="model-foot"><span>TRAINING RECORDS</span><strong id="training-rows">—</strong></div>
+        </section>
+        <section class="panel insight-panel">
+          <div class="panel-heading compact-heading"><div><div class="section-index">04 / RECENT SAMPLE</div><h2>Risk distribution</h2></div><span class="chart-total">LATEST 20</span></div>
+          <div class="insight-chart-wrap"><canvas id="risk-chart" role="img" aria-label="Risk distribution for the latest transactions"></canvas></div>
+        </section>
+        <section class="panel insight-panel probability-panel">
+          <div class="panel-heading compact-heading"><div><div class="section-index">05 / ACTIVITY SIGNAL</div><h2>Fraud probability</h2></div><span class="chart-total">RECENT</span></div>
+          <div class="insight-chart-wrap probability-chart-wrap"><canvas id="probability-chart" role="img" aria-label="Fraud probability trend across recent transactions"></canvas></div>
+        </section>
+      </section>
+
+      <section class="panel activity-panel" id="activity">
+        <div class="panel-heading activity-heading"><div><div class="section-index">06 / LIVE FEED</div><h2>Recent transactions</h2><p class="activity-subtitle">Download, print, or clear stored transaction history.</p></div><div class="activity-controls"><span class="refresh-indicator"><span class="live-dot"></span> AUTO-REFRESH 10S</span><button type="button" id="export-csv-button" class="utility-button" title="Download all transactions as CSV"><span aria-hidden="true">⇩</span> CSV Export</button><button type="button" id="export-excel-button" class="utility-button" title="Download a CSV file that opens in Excel"><span aria-hidden="true">▦</span> Excel CSV</button><button type="button" id="export-pdf-button" class="utility-button" title="Print this dashboard or save it as a PDF"><span aria-hidden="true">▤</span> PDF / Print</button><button type="button" id="clear-history-button" class="utility-button danger-button" title="Delete all saved transactions"><span aria-hidden="true">⌫</span> Clear history</button><button type="button" id="refresh-button" class="refresh-button" aria-label="Refresh dashboard" title="Refresh dashboard">↻</button></div></div>
+        <div id="activity-message" class="activity-message" role="status" aria-live="polite" hidden></div>
+        <div class="table-scroll"><table><thead><tr><th>TRANSACTION ID</th><th>AMOUNT</th><th>TIME</th><th>LOCATION</th><th>PROBABILITY</th><th>RISK</th><th>DECISION</th><th>STATUS</th></tr></thead><tbody id="transaction-rows"><tr><td colspan="8" class="empty-state">No transactions yet. Load a demo or enter a transaction to begin.</td></tr></tbody></table></div>
+      </section>
+      <footer class="page-footer"><span>EDUCATIONAL SIMULATION · SYNTHETIC TRANSACTIONS ONLY</span><span>Model scores are demonstrations, not real-world fraud determinations.</span></footer>
+    </main>
+  </div>
+</body>
+</html> 
